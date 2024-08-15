@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
+  <title>언제 가능하세요?</title>
   <meta charset='utf-8' />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 반응형 디자인을 위해 추가 -->
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/ko.min.js'></script>
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.css" rel="stylesheet">
@@ -20,7 +22,7 @@
 
   <style>
     #calendar {
-      max-width: 1300px;
+      max-width: 1000px;
       margin: 40px auto;
     }
     #screenshotButton {
@@ -30,12 +32,20 @@
       width: 200px;
       height: 50px;
     }
+    @media (max-width: 768px) {
+      #screenshotButton {
+        width: 150px;
+        height: 40px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
   <div id='calendar'></div>
   <div style="text-align: center; margin-top: 20px;">
     <button id="screenshotButton" class="btn btn-primary">달력 이미지 저장</button>
+    <div>모바일은 스크린샷 하세요</div>
   </div>
 
   <!-- Bootstrap Modal for Event Editing -->
@@ -43,25 +53,25 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
+          <h5 class="modal-title" id="editEventModalLabel">이벤트 수정</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form id="eventForm">
             <div class="form-group">
-              <label for="selectEvent">Select Existing Event</label>
+              <label for="selectEvent">기존 일정 목록</label>
               <select class="form-control" id="selectEvent">
-                <option value="">Select an event</option>
+                <option value="">기존 일정을 선택하세요</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="editEventModalTitle">Event Title</label>
-              <input type="text" class="form-control" id="editEventModalTitle" placeholder="Enter event title">
+              <label for="editEventModalTitle">일정 이름</label>
+              <input type="text" class="form-control" id="editEventModalTitle" placeholder="일정이름을 입력하세요.">
             </div>
             <div class="form-group">
-              <label for="editEventModalColor">Event Color</label>
+              <label for="editEventModalColor">일정 색깔</label>
               <input type="color" class="form-control" id="editEventModalColor">
             </div>
           </form>
@@ -104,15 +114,15 @@
 
           // 모달 열기
           $('#editEventModal').modal('show');
-          
+
           // 드롭다운에 이벤트 제목을 그룹화하여 추가
           updateEventDropdown();
-          
+
           // 드롭다운 선택 시 이벤트 데이터 로드
           $('#selectEvent').off('change').on('change', function() {
             var selectedTitle = $(this).val();
             var eventData = getEventDataByTitle(selectedTitle);
-            
+
             if (eventData) {
               $('#editEventModalTitle').val(eventData.title);
               $('#editEventModalColor').val(eventData.backgroundColor);
@@ -158,7 +168,7 @@
         // 드롭다운에 옵션 추가
         var $select = $('#selectEvent');
         $select.empty();
-        $select.append('<option value="">Select an event</option>');
+        $select.append('<option value="">기존 일정을 선택하세요.</option>');
         for (var title in eventTitles) {
           $select.append(`<option value="${title}">${title}</option>`);
         }
@@ -194,7 +204,11 @@
           console.error('Screenshot error:', error);
         });
       });
-      
+
+      // 폼의 기본 제출 동작을 막기 위한 코드 추가
+      document.getElementById('eventForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 제출 동작 방지
+      });
 
       calendar.render();
     });
