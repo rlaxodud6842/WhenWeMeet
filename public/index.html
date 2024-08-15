@@ -180,13 +180,21 @@
 
       // 스크린샷 저장 기능
       document.getElementById('screenshotButton').addEventListener('click', function() {
-        html2canvas(document.getElementById('calendar')).then(function(canvas) {
+        html2canvas(document.getElementById('calendar'), {
+          scrollX: 0,
+          scrollY: 0,
+          scale: 2, // 캔버스 스케일 조정 (확대 비율, 기본값: 1)
+          useCORS: true // CORS 관련 이미지 처리 (필요 시 설정)
+        }).then(function(canvas) {
           var link = document.createElement('a');
           link.download = 'calendar_screenshot.png';
           link.href = canvas.toDataURL();
           link.click();
+        }).catch(function(error) {
+          console.error('Screenshot error:', error);
         });
       });
+      
 
       calendar.render();
     });
