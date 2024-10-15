@@ -105,6 +105,14 @@
             duration: { days: 1 }
           }
         },
+        slotDuration: '00:30:00',
+        slotLabelInterval: '00:30',
+        slotLabelFormat: { // 시간에서 '시' 제거
+        hour: 'numeric',
+        minute: '2-digit',
+        omitZeroMinute: false,
+        hour12: false  // 24시간 형식 사용
+        },
         nowIndicator: true,
         locale: 'ko',
         initialDate: dateString,
