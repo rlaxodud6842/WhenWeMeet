@@ -98,8 +98,14 @@
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek'
+          right: 'dayGridMonth,timeGridWeek,timeGridOneDay'
+        },views:{
+          timeGridOneDay: {
+            type: 'timeGrid',
+            duration: { days: 1 }
+          }
         },
+        nowIndicator: true,
         locale: 'ko',
         initialDate: dateString,
         navLinks: true,
